@@ -10,13 +10,13 @@ export const useTheme = () => useContext(ThemeContext)
 
 export default function ThemeContextProvider({ children })
 {
-    const [fontSize, setFontSize] = useState(typeof window !== 'undefined' && localStorage.getItem('fontSize'))
+    const [fontSize, setFontSize] = useState(typeof window !== 'undefined' ? localStorage.getItem('fontSize') : '4vh')
 
     const [isDarkTheme, toggleTheme] = useReducer((prev) => 
     {
         prev ? localStorage.setItem('theme', 'light') : localStorage.setItem('theme', 'dark')
         return !prev
-    }, typeof window !== 'undefined' && localStorage.getItem('theme') == 'dark' ? true : false)
+    }, typeof window !== 'undefined' ? localStorage.getItem('theme') == 'dark' : false)
 
     function changeFontSize(size)
     {
@@ -33,8 +33,8 @@ export default function ThemeContextProvider({ children })
     }
 
     return (
-        // <ThemeProvider theme={theme}>
         <ThemeProvider theme={isDarkTheme ? { ...darkTheme, fontSize } : { ...lightTheme, fontSize }}>
+            {/* <ThemeProvider theme={darkTheme}> */}
             <ThemeContext.Provider value={themeCtx}>
                 {children}
             </ThemeContext.Provider>

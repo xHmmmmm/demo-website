@@ -18,7 +18,7 @@ export default function Template({ children })
 {
 
     return (
-        <ThemeContextProvider layout>
+        <ThemeContextProvider>
             <GlobalStyle />
 
             <Layout initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
