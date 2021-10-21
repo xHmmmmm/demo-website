@@ -11,6 +11,13 @@ const StyledSection = styled(motion.section)`
     background-color: ${({ theme, isPrimary }) => isPrimary ? theme.colors.primaryBackground : theme.colors.secondaryBackground};
     overflow-x: hidden;
     scroll-snap-align: start;
+    border-bottom: 3px solid #555555;
+    
+    @media(max-width: 1024px)
+    {
+        border-bottom: none;
+        padding: 0.5em;
+    }
 `
 
 const Content = forwardRef(({ children, sectionId, isPrimary }, ref) =>

@@ -29,7 +29,7 @@ export default function SettingsButton()
     })
 
 
-    const ThemeToggleSpan = styled(motion.span)`
+    const StyledSettingsSpan = styled(motion.span)`
     display: flex;
     background-color: ${({ theme }) => theme.colors.navigation};
     cursor: pointer;
@@ -49,16 +49,17 @@ export default function SettingsButton()
 
     svg
     {
+        color: ${({ theme }) => theme.colors.foreground};
         height: 20px;
         width: 20px;
     }
 
 `
     return (
-        <ThemeToggleSpan variants={variants}>
+        <StyledSettingsSpan variants={variants}>
             <StyledSettingsLink to={isSettings ? '/' : '/settings'}>
                 {isSettings ? <RiHome2Line /> : <RiSettings4Line />}
             </StyledSettingsLink>
-        </ThemeToggleSpan>
+        </StyledSettingsSpan>
     )
 }

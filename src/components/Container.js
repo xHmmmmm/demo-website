@@ -11,6 +11,11 @@ const StyledMain = styled(motion.main)`
     overflow-y: auto;
     scroll-snap-type: y mandatory;
     scroll-behavior: smooth;
+
+    @media(max-width: 1024px)
+    {
+        scroll-snap-type: none;
+    }
 `
 
 export default function Container({ children, pageId })

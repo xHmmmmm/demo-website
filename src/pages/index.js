@@ -18,20 +18,19 @@ const variants = {
     transition: { duration: 0.5, delay: 0.5 },
   },
   hidden: {
-    x: '-30vw',
+    x: '-100%',
     opacity: 1,
   },
 }
 
-const variants2 = {
+const variants2 =
+{
   visible: {
-    x: 0,
     opacity: 1,
-    transition: { duration: 0.5, delay: 0.5 },
+    transition: { duration: 0.5 },
   },
   hidden: {
-    x: '120vw',
-    opacity: 1,
+    opacity: 0
   },
 }
 
@@ -40,8 +39,8 @@ export default function IndexPage()
 
   return (
     <Container pageId={0}>
+      <Seo title='Home' />
       <Content isPrimary sectionId='home'>
-        <Seo title='Home' />
         <motion.h1>
           HOME
         </motion.h1>

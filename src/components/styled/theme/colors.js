@@ -3,7 +3,8 @@ export const lightColors = {
     primaryBackground: '#eeeeee',
     secondaryBackground: '#dddddd',
     foreground: '#000000',
-    navigation: '#bbbbbb',
+    navigation: '#aaaaaa',
+    topBar: '#bbbbbb',
     navigationHover: '#b1b1b1',
 }
 
@@ -12,6 +13,7 @@ export const darkColors = {
     primaryBackground: '#181A1B',
     secondaryBackground: '#323638',
     foreground: '#ffffff',
-    navigation: '#0d0d0d',
+    navigation: '#151515',
+    topBar: '#0d0d0d',
     navigationHover: '#000000',
 }

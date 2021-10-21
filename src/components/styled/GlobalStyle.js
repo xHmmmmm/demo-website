@@ -10,6 +10,8 @@ export const GlobalStyle = createGlobalStyle`
         display: flex;
         align-items: center;
         justify-content: center;
+        scroll-padding-top: 60px;
+        overflow: hidden;
     }
     
     body
@@ -21,6 +23,7 @@ export const GlobalStyle = createGlobalStyle`
         height: 100%;
         width: 100%;
         background-color: ${({ theme }) => theme.colors.bodyBackground};
+        color: ${({ theme }) => theme.colors.foreground};
     }
     
     #___gatsby, #gatsby-focus-wrapper
@@ -32,7 +35,7 @@ export const GlobalStyle = createGlobalStyle`
     *, *::before, *::after
     {
         box-sizing: border-box;
-        color: ${({ theme }) => theme.colors.foreground};
+        -webkit-tap-highlight-color: transparent;
     }
 
     button
