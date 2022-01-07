@@ -8,22 +8,29 @@ const StyledMain = styled(motion.main)`
     flex-direction: column;
     width: 100vw;
     height: 100vh;
-    overflow-y: auto;
+    overflow-y: scroll;
     scroll-snap-type: y mandatory;
     scroll-behavior: smooth;
+    scrollbar-color: ${({ theme }) => theme.colors.scrollbarThumb} ${({ theme }) => theme.colors.primaryBackground} ;
+    scrollbar-width: 15px;
 
-    @media(max-width: 1024px)
+    @media(max-width: ${({ theme }) => theme.mobileScreen})
     {
+        flex: 1;
+        height: 100%;
+        scrollbar-width: none;
         scroll-snap-type: none;
     }
 `
 
 export default function Container({ children, pageId })
 {
+
     return (
-        <StyledMain key={pageId} initial={{ opacity: 0 }} transition={{ duration: 0.5 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+        <StyledMain key={pageId} initial={{ opacity: 0 }
+        } transition={{ duration: 0.5 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
             {children}
-        </StyledMain>)
+        </StyledMain >)
 }
 
 Container.propTypes = {

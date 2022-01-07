@@ -1,12 +1,12 @@
-import React, { useState, useEffect, useReducer } from 'react'
+import React, { useState, useEffect, useReducer, useRef } from 'react'
 import styled from 'styled-components';
 import { motion } from "framer-motion";
 import { sections } from "sections";
 import ThemeButton from "components/ThemeButton";
-import SettingsButton from 'components/SettingsButton';
 import { useLocation } from '@reach/router';
 import { useView } from './contexts/ViewContext';
 import { RiMenuFill } from "react-icons/ri";
+import { scrollToSection } from "sections";
 
 const variants = {
     initial: { opacity: 0.4 },
@@ -24,65 +24,70 @@ const StyledDesktopNav = styled(motion.nav)`
     left: 0;
     width: 60px;
     padding-block: 10px;
-    z-index: 50;
+    z-index: 30;
     user-select: none;
 `
 
 const StyledMobileNav = styled(motion.nav)`
+    display: flex;
     position: sticky;
     top: 0;
-    width: 100vw;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    z-index: 30;
-    user-select: none;
+    width: 100%;
+    flex-direction: row;
     justify-content: space-between;
-    cursor: pointer;
+    align-items: center;
+    height: 60px;
+    padding-left: 1rem;
+    z-index: 30;
     -webkit-box-shadow: 0px 9px 30px -25px rgba(0, 0, 0, 0.5);
     -moz-box-shadow: 0px 9px 30px -25px rgba(0, 0, 0, 0.5);
     box-shadow: 0px 9px 30px -25px rgba(0, 0, 0, 0.5);
 
-    > span
-    {
-        display: flex;
-        width: 100%;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-        height: 60px;
-        padding-inline: 1rem;
-        z-index: 50;
-        background-color: ${({ theme }) => theme.colors.topBar};
-    }
-
+    background-color: ${({ theme }) => theme.colors.topBar};
+    
     > svg
     {
-        height: 30px;
-        width: 30px;
-        margin: 10px;
+        height: 100%;
+        width: auto;
+        padding: 0.8rem 1.1rem;
+        cursor: pointer;
     }
 `
 
-const StyledLinksContainer = styled(motion.div)`
+const DesktopLinksContainer = styled(motion.div)`
     display: flex;
     flex-direction: column;
     margin-block: auto;
     gap: 10px;
-    z-index: 40;
+    z-index: 100;
+`
 
-    &[data-isOpened='true']
+const MobileLinksWrapper = styled(motion.div)`
+    position: fixed;
+    display: flex;
+    left: -100%;
+    top: 0;
+    width: 100%;
+    height: 100vh;
+
+    &[data-isopened='true']
     {
-        margin-top: 60px;
+        left: 0;
     }
-    
-    @media(max-width: 1024px)
+`
+
+const MobileLinksContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    height: 100%;
+    background-color: ${({ theme }) => theme.colors.navigation};
+
+    > button
     {
-        position: absolute;
-        margin-top: -120px;
-        gap: 0;
-        width: 100%;
-        background-color: ${({ theme }) => theme.colors.navigation};
+        height: auto;
+        width: auto;
+        padding-block: 0.8em;
     }
 `
 
@@ -93,7 +98,7 @@ const StyledAnchorButton = styled(motion.button)`
     background-color: ${({ theme }) => theme.colors.navigation};
     color: ${({ theme }) => theme.colors.foreground};
     
-    @media(max-width: 1024px)
+    @media(max-width: ${({ theme }) => theme.mobileScreen})
     {
         font-weight: 600;
         font-size: 1.5rem;
@@ -107,55 +112,60 @@ const StyledAnchorButton = styled(motion.button)`
 export default function Navigation()
 {
     const location = useLocation()
-    const [isSettings, setIsSettings] = useState(location.pathname.includes('settings'))
+    const [isHome, setIsHome] = useState(location.pathname == '/')
     const [isMenuOpened, toggleMenuOpened] = useReducer((prev) => !prev, false)
+    const menuRef = useRef(null)
 
     const { isMobile } = useView()
 
     useEffect(() =>
     {
-        setIsSettings(location.pathname.includes('settings'))
+        setIsHome(location.pathname == '/')
     })
 
-    function scrollToSection(id)
+    function scroll(id)
     {
-        const element = document.getElementById(id) //using refs in this case seems to be an overengineering
-        element.scrollIntoView()
-        toggleMenuOpened()
+        scrollToSection(id)
+        isMobile && toggleMenuOpened()
+    }
+
+    function closeMenu(e)
+    {
+        if (menuRef.current && !menuRef.current.contains(e.target))
+        {
+            toggleMenuOpened()
+        }
+    }
+
+    if (isMobile)
+    {
+        return (
+            isHome && <StyledMobileNav>
+                <ThemeButton />
+                <RiMenuFill onClick={toggleMenuOpened} />
+                <MobileLinksWrapper data-isopened={isMenuOpened} onClick={closeMenu} layout transition={{ duration: 0.25 }}>
+                    <MobileLinksContainer ref={menuRef}>
+                        {sections.map((section) =>
+                            <StyledAnchorButton key={section.id} onClick={() => scroll(section.id)}>
+                                {section.label}
+                            </StyledAnchorButton>
+                        )}
+                    </MobileLinksContainer>
+                </MobileLinksWrapper>
+            </StyledMobileNav >
+        )
     }
 
     return (
-        isMobile ?
-            <StyledMobileNav>
-                <span>
-                    <ThemeButton />
-                    <RiMenuFill onClick={toggleMenuOpened} />
-                </span>
-                <StyledLinksContainer data-isOpened={isMenuOpened} layout>
-                    {!isSettings && sections.map((section) =>
-                        <motion.span key={section.id}>
-                            <StyledAnchorButton onClick={() => scrollToSection(section.id)}>
-                                {section.label}
-                            </StyledAnchorButton>
-                        </motion.span>
-                    )}
-                </StyledLinksContainer>
-            </StyledMobileNav >
+        isHome && <StyledDesktopNav variants={variants} initial='initial' whileHover='hover' animate='initial'>
 
-            :
+            <DesktopLinksContainer initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                {sections.map((section) =>
+                    <StyledAnchorButton key={section.id} whileHover={{ scale: 1.1 }} onClick={() => scroll(section.id)} />
+                )}
+            </DesktopLinksContainer>
 
-            <StyledDesktopNav variants={variants} initial='initial' whileHover='hover' animate='initial'>
-                <SettingsButton />
-
-                <StyledLinksContainer initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-                    {!isSettings && sections.map((section) =>
-                        <motion.span key={section.id} whileHover={{ scale: 1.1 }}>
-                            <StyledAnchorButton onClick={() => scrollToSection(section.id)} />
-                        </motion.span>
-                    )}
-                </StyledLinksContainer>
-
-                <ThemeButton />
-            </StyledDesktopNav >
+            <ThemeButton />
+        </StyledDesktopNav>
     )
 }

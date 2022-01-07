@@ -1,17 +1,24 @@
 export const sections = [
     {
-        id: 'home',
-        label: 'HOME',
-        url: '#home',
+        id: 'home-page',
+        label: "Home"
     },
     {
-        id: 'cos',
-        label: 'COS',
-        url: '#cos',
+        id: 'gallery-page',
+        label: "Gallery"
     },
     {
-        id: 'xd',
-        label: 'XD',
-        url: '#xd',
+        id: 'news-page',
+        label: "News"
+    },
+    {
+        id: 'products-page',
+        label: "Products"
     }
 ]
+
+export function scrollToSection(id)
+{
+    const element = document.getElementById(id)
+    element.scrollIntoView()
+}

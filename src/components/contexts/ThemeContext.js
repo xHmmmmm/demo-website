@@ -1,22 +1,30 @@
-import React, { createContext, useContext, useReducer, useState } from "react";
+import React, { createContext, useContext, useReducer, useState, useEffect } from "react";
 import { ThemeProvider } from "styled-components";
 import { lightTheme, darkTheme } from 'components/styled/theme/theme';
 
 const ThemeContext = createContext({
-
+    changeFontSize: () => null,
+    isDarkTheme: false,
+    toggleTheme: () => null
 })
 
 export const useTheme = () => useContext(ThemeContext)
 
 export default function ThemeContextProvider({ children })
 {
-    const [fontSize, setFontSize] = useState(typeof window !== 'undefined' ? localStorage.getItem('fontSize') : '4vh')
+    const [fontSize, setFontSize] = useState('4vh')
 
     const [isDarkTheme, toggleTheme] = useReducer((prev) => 
     {
         prev ? localStorage.setItem('theme', 'light') : localStorage.setItem('theme', 'dark')
         return !prev
-    }, typeof window !== 'undefined' ? localStorage.getItem('theme') == 'dark' : false)
+    }, false)
+
+    useEffect(() =>
+    {
+        setFontSize(localStorage.getItem('fontSize') || '4vh')
+        localStorage.getItem('theme') == 'dark' && toggleTheme()
+    }, [])
 
     function changeFontSize(size)
     {
@@ -34,7 +42,6 @@ export default function ThemeContextProvider({ children })
 
     return (
         <ThemeProvider theme={isDarkTheme ? { ...darkTheme, fontSize } : { ...lightTheme, fontSize }}>
-            {/* <ThemeProvider theme={darkTheme}> */}
             <ThemeContext.Provider value={themeCtx}>
                 {children}
             </ThemeContext.Provider>
