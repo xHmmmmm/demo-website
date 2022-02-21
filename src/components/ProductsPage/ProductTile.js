@@ -13,10 +13,12 @@ const ProductTileContainer = styled(motion.article)`
 
     color: ${({ theme }) => theme.colors.foreground};
     font-size: clamp(0.7em, 2vw, 1.1em);
+    border-radius: 0.1em;
 
     > div:first-of-type
     {
         background-color: #bbbbbb;
+        border-radius: inherit;
     }
 
     @media(max-width: ${({ theme }) => theme.narrowScreen})
@@ -34,7 +36,7 @@ const ProductTileContainer = styled(motion.article)`
         font-size: clamp(0.75em, 1.2vw, 1.2em);
     }
    
-    @media(min-aspect-ratio: 2/1)
+    @media(min-aspect-ratio: 3/2)
     {
         grid-template-columns: 0.4fr 0.6fr;
         grid-template-rows: 1fr;

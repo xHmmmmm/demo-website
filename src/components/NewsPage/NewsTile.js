@@ -12,10 +12,12 @@ const NewsTileContainer = styled(motion.article)`
 
     color: ${({ theme }) => theme.colors.foreground};
     font-size: clamp(0.7em, 2vw, 1.1em);
+    border-radius: 0.1em;
 
     > div:first-of-type
     {
         background-color: #bbbbbb;
+        border-radius: inherit;
     }
 
     @media(max-width: ${({ theme }) => theme.narrowScreen})

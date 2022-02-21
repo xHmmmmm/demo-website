@@ -13,10 +13,12 @@ const BigNewsTileContainer = styled.article`
 
     color: ${({ theme }) => theme.colors.foreground};
     font-size: clamp(0.8em, 1vw, 1.2em);
+    border-radius: 0.1em;
 
     > div:first-of-type
     {
         background-color:  ${({ theme }) => theme.colors.accent};
+        border-radius: inherit;
     }
 
     @media(max-width: ${({ theme }) => theme.mobileScreen})
